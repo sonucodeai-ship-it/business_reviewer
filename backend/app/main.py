@@ -53,8 +53,8 @@ def generate_review_api(
 ):
     try:
         review = generate_review(
-            facility=request.facility,
-            doctor=request.doctor,
+            facilities=request.facilities,
+            doctors=request.doctors,
             clinic_experience=request.clinic_experience,
         )
 

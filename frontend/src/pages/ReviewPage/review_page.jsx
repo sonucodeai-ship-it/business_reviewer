@@ -7,32 +7,96 @@ const API_BASE_URL =
 
 /*
  * Google review URL for Madhu Dentocare Clinic.
- *
- * This opens the clinic's Google review interface.
  */
 const GOOGLE_REVIEW_URL =
-  "https://www.google.com/search?q=madhu+dentocare+clinic&sca_esv=459cc50bc9b1d43b&sxsrf=APpeQnuo6eCjuIeR-Pg22EnJrNG2ZQx5dQ%3A1790149807495&source=hp&ei=r4SzasffG93g4-EPmZfkgQw&iflsig=ABILxe8AAAAAarOSv36j6f5HLon3bydABXoN8BwhXgFo&oq=madhu+den&gs_lp=Egdnd3Mtd2l6IgltYWRodSBkZW4qBAgAGCcyBBAjGCcyBRAAGIAEMg4QLhiABBjHARivARiOBTIFEAAYgAQyBRAAGIAEMgUQABiABDILEC4YgAQYxwEYrwEyCxAuGIAEGMcBGK8BMgUQABiABDIFEAAYgARIpR5Q9QdYyxJwAXgAkAEAmAG9AaAByQuqAQMwLjm4AQHIAQD4AQGYAgqgAvsLqAIKwgIHECMY6gIYJ8ICChAAGIAEGIoFGEPCAg4QLhiABBixAxjHARjRA8ICDRAAGIAEGIoFGEMYsQPCAhAQABiABBiKBRhDGLEDGIMBwgIQEC4YgAQYigUYQxjHARjRA8ICCxAuGIAEGMcBGK8BMgUQABiABDIFEAAYgARIpR5Q9QdYyxJwAXgAkAEAmAG9AaAByQuqAQMwLjm4AQHIAQD4AQGYAgqgAvsLqAIKwgIHECMY6gIYJ8ICChAAGIAEGIoFGEPCAg4QLhiABBixAxjHARjRA8ICDRAAGIAEGIoFGEMYsQPCAhAQLhiABBiKBRhDGLEDGIMBwgILEAAYgAQYsQMYgwHCAhQQLhiABBixAxjHARivARiYBRiOBcICCBAAGIAEGLEDwgIIEAAYgAQYtAfCAgUQLhiABMICCBAuGIAEGLEDwgIOEAAYgAQYyQMYxwEYrwHCAgoQABiABBgCGMsBmAML8QWSZkvkThrMaZIHAzEuOaAHnmqyBwMwLjm4B-8LwgcHMC40LjUuMcgHJYAIAQ&sclient=gws-wiz#lrd=0x390d1b6aef4792d7:0x63380d1c6af10b87,3,,,,";
+  "https://g.page/r/CYcL8WocDThjEBM/review";
+
+/*
+ * Copy text to clipboard.
+ *
+ * Uses the modern Clipboard API first and falls back
+ * to a temporary textarea for older browsers.
+ */
+const copyTextToClipboard = async (text) => {
+  const cleanText = text?.trim();
+
+  if (!cleanText) {
+    throw new Error("There is no review to copy.");
+  }
+
+  if (
+    navigator.clipboard &&
+    typeof navigator.clipboard.writeText === "function"
+  ) {
+    await navigator.clipboard.writeText(cleanText);
+    return true;
+  }
+
+  const textarea = document.createElement("textarea");
+
+  textarea.value = cleanText;
+
+  textarea.setAttribute("readonly", "");
+
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+
+  document.body.appendChild(textarea);
+
+  textarea.focus();
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  const copied = document.execCommand("copy");
+
+  document.body.removeChild(textarea);
+
+  if (!copied) {
+    throw new Error("Clipboard copy failed.");
+  }
+
+  return true;
+};
 
 function ReviewPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  /*
+   * Data received from first_page.jsx.
+   *
+   * All four question groups are arrays because
+   * every question supports multi-select.
+   */
   const {
     review: initialReview,
-    facility = "",
-    doctor = "",
+    facilities = [],
+    doctors = [],
     clinicExperience = [],
+    overallExperience = [],
   } = location.state || {};
 
   const [review, setReview] = useState(initialReview || "");
 
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isRegenerating, setIsRegenerating] =
-    useState(false);
-  const [isOpeningGoogle, setIsOpeningGoogle] =
-    useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isOpeningGoogle, setIsOpeningGoogle] = useState(false);
   const [error, setError] = useState("");
+
+  /*
+   * Show copied state temporarily.
+   */
+  const showCopiedState = (duration = 2500) => {
+    setCopied(true);
+
+    window.setTimeout(() => {
+      setCopied(false);
+    }, duration);
+  };
 
   /*
    * Copy the currently displayed review.
@@ -44,13 +108,9 @@ function ReviewPage() {
       throw new Error("There is no review to copy.");
     }
 
-    await navigator.clipboard.writeText(reviewText);
+    await copyTextToClipboard(reviewText);
 
-    setCopied(true);
-
-    window.setTimeout(() => {
-      setCopied(false);
-    }, 2500);
+    showCopiedState();
   };
 
   /*
@@ -79,14 +139,16 @@ function ReviewPage() {
   };
 
   /*
-   * Regenerate the review using the same customer selections.
+   * Regenerate the review using the same four
+   * customer selections.
    */
   const handleRegenerate = async () => {
     if (
       isRegenerating ||
-      !facility ||
-      !doctor ||
-      clinicExperience.length === 0
+      facilities.length === 0 ||
+      doctors.length === 0 ||
+      clinicExperience.length === 0 ||
+      overallExperience.length === 0
     ) {
       return;
     }
@@ -100,13 +162,16 @@ function ReviewPage() {
         `${API_BASE_URL}/api/reviews/generate`,
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
-            facility,
-            doctor,
+            facilities,
+            doctors,
             clinic_experience: clinicExperience,
+            overall_experience: overallExperience,
           }),
         }
       );
@@ -143,20 +208,16 @@ function ReviewPage() {
   };
 
   /*
-   * Prepare the review for Google.
+   * Copy the review and open Google.
    *
-   * Important:
-   * Browsers cannot directly type into Google's review form
-   * or select the star rating because Google's page is hosted
-   * on a different origin.
+   * Browser security prevents this application from
+   * directly typing into Google's review textbox.
    *
-   * We can, however:
+   * Flow:
    *
-   * 1. Copy the latest review automatically.
-   * 2. Open Google's review page.
-   *
-   * The customer then selects 5 stars and pastes/submits
-   * the review.
+   * 1. Open Google immediately from the click.
+   * 2. Copy the current review.
+   * 3. User pastes the review into Google.
    */
   const handleGoogleReview = async () => {
     const reviewText = review.trim();
@@ -165,6 +226,7 @@ function ReviewPage() {
       setError(
         "Please generate a review before continuing to Google."
       );
+
       return;
     }
 
@@ -176,10 +238,8 @@ function ReviewPage() {
     setError("");
 
     /*
-     * Open the Google page immediately.
-     *
-     * Opening the window synchronously inside the click
-     * handler helps prevent browser popup blocking.
+     * Open Google synchronously from the user click.
+     * This helps prevent popup blocking.
      */
     const googleWindow = window.open(
       GOOGLE_REVIEW_URL,
@@ -189,15 +249,12 @@ function ReviewPage() {
 
     try {
       /*
-       * Copy the exact review currently visible to the user.
+       * Copy the exact review visible on the page.
        */
-      await navigator.clipboard.writeText(reviewText);
+      await copyTextToClipboard(reviewText);
 
-      setCopied(true);
+      showCopiedState(3500);
 
-      /*
-       * If the browser blocked the new tab, inform the user.
-       */
       if (!googleWindow) {
         throw new Error(
           "Google could not be opened because the browser blocked the popup."
@@ -205,12 +262,11 @@ function ReviewPage() {
       }
 
       /*
-       * Give the user a clear indication that the review
-       * has been copied and Google has been opened.
+       * We intentionally do not access or modify Google's page.
        */
       window.setTimeout(() => {
-        setCopied(false);
-      }, 3000);
+        setError("");
+      }, 500);
     } catch (googleError) {
       console.error(
         "Unable to prepare Google review:",
@@ -218,12 +274,17 @@ function ReviewPage() {
       );
 
       /*
-       * Google may already be open even if clipboard access
-       * failed. Therefore we don't close the tab.
+       * Do not close Google if it already opened.
        */
-      setError(
-        "Google has been opened. Please copy the review manually and paste it into the review box."
-      );
+      if (!googleWindow) {
+        setError(
+          "Google could not be opened. Please allow pop-ups and try again."
+        );
+      } else {
+        setError(
+          "Google is open. Please copy the review manually and paste it into the review box."
+        );
+      }
     } finally {
       setIsOpeningGoogle(false);
     }
@@ -236,19 +297,29 @@ function ReviewPage() {
     return (
       <div className="review-generator-page">
         <main className="review-generator-container">
+
           <section className="review-main-card">
+
             <div className="card-top">
+
               <div className="ai-title">
-                <div className="ai-icon">!</div>
+
+                <div className="ai-icon">
+                  !
+                </div>
 
                 <div>
-                  <h3>Review not found</h3>
+                  <h3>
+                    Review not found
+                  </h3>
 
                   <span>
                     Please generate a review first.
                   </span>
                 </div>
+
               </div>
+
             </div>
 
             <div className="review-text-box">
@@ -260,6 +331,7 @@ function ReviewPage() {
             </div>
 
             <div className="review-actions">
+
               <button
                 type="button"
                 className="copy-button"
@@ -267,8 +339,11 @@ function ReviewPage() {
               >
                 ← Back to Experience
               </button>
+
             </div>
+
           </section>
+
         </main>
       </div>
     );
@@ -276,14 +351,21 @@ function ReviewPage() {
 
   return (
     <div className="review-generator-page">
+
       {/* Background decorations */}
       <div className="review-bg-circle review-circle-one"></div>
       <div className="review-bg-circle review-circle-two"></div>
 
       <main className="review-generator-container">
-        {/* Header */}
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
         <header className="review-page-header">
+
           <div className="review-brand">
+
             <div className="review-logo">
               M
             </div>
@@ -292,50 +374,75 @@ function ReviewPage() {
               <h1>Madhu Dentocare</h1>
               <span>Dental Clinic</span>
             </div>
+
           </div>
 
           <div className="secure-badge">
+
             <span className="secure-icon">
               ✓
             </span>
 
             Your experience
+
           </div>
+
         </header>
 
-        {/* Progress */}
+        {/* =================================================
+            PROGRESS
+        ================================================= */}
+
         <div className="progress-wrapper">
+
           <div className="progress-step completed">
+
             <div className="progress-circle">
               ✓
             </div>
 
-            <span>Your Experience</span>
+            <span>
+              Your Experience
+            </span>
+
           </div>
 
           <div className="progress-line active"></div>
 
           <div className="progress-step current">
+
             <div className="progress-circle">
               2
             </div>
 
-            <span>Review</span>
+            <span>
+              Review
+            </span>
+
           </div>
 
           <div className="progress-line"></div>
 
           <div className="progress-step">
+
             <div className="progress-circle">
               3
             </div>
 
-            <span>Google</span>
+            <span>
+              Google
+            </span>
+
           </div>
+
         </div>
 
-        {/* Intro */}
+        {/* =================================================
+            INTRO
+        ================================================= */}
+
         <section className="review-intro">
+
           <span className="review-eyebrow">
             AI REVIEW ASSISTANT
           </span>
@@ -349,9 +456,13 @@ function ReviewPage() {
             We've turned your experience into a natural
             review. Feel free to edit it before sharing.
           </p>
+
         </section>
 
-        {/* Error */}
+        {/* =================================================
+            ERROR
+        ================================================= */}
+
         {error && (
           <div
             className="error-message"
@@ -361,12 +472,24 @@ function ReviewPage() {
           </div>
         )}
 
-        {/* Main content */}
+        {/* =================================================
+            MAIN CONTENT
+        ================================================= */}
+
         <section className="review-content">
-          {/* Left side */}
+
+          {/* =================================================
+              AI REVIEW CARD
+          ================================================= */}
+
           <div className="review-main-card">
+
+            {/* Card header */}
+
             <div className="card-top">
+
               <div className="ai-title">
+
                 <div className="ai-icon">
                   ✦
                 </div>
@@ -380,15 +503,23 @@ function ReviewPage() {
                     Based on your experience
                   </span>
                 </div>
+
               </div>
 
               <div className="generated-badge">
+
                 <span></span>
+
                 Generated
+
               </div>
+
             </div>
 
+            {/* Rating */}
+
             <div className="rating-row">
+
               <div className="stars">
                 ★★★★★
               </div>
@@ -396,29 +527,40 @@ function ReviewPage() {
               <span>
                 Share your experience
               </span>
+
             </div>
+
+            {/* Review text */}
 
             <div
               className={`review-text-box ${
                 isEditing ? "editing" : ""
               }`}
             >
+
               {isEditing ? (
                 <textarea
                   value={review}
                   onChange={(event) => {
                     setReview(event.target.value);
                     setCopied(false);
+                    setError("");
                   }}
                   autoFocus
                   aria-label="Edit your review"
                 />
               ) : (
-                <p>{review}</p>
+                <p>
+                  {review}
+                </p>
               )}
+
             </div>
 
+            {/* Review meta */}
+
             <div className="review-meta">
+
               <span>
                 {review.length} characters
               </span>
@@ -430,10 +572,65 @@ function ReviewPage() {
               <span>
                 Natural & personal
               </span>
+
             </div>
 
-            {/* Actions */}
+            {/* =================================================
+                GOOGLE CTA
+                Moved INSIDE the AI review card
+            ================================================= */}
+
+            <div className="google-review-card">
+
+              <div className="google-review-info">
+
+                <div className="google-icon">
+                  G
+                </div>
+
+                <div>
+
+                  <strong>
+                    Ready to share?
+                  </strong>
+
+                  <span>
+                    Your review will be copied before Google opens.
+                  </span>
+
+                </div>
+
+              </div>
+
+              <button
+                type="button"
+                className="google-button"
+                onClick={handleGoogleReview}
+                disabled={isOpeningGoogle}
+              >
+
+                <span>
+                  {isOpeningGoogle
+                    ? "Opening Google..."
+                    : "Copy & Continue to Google"}
+                </span>
+
+                <span className="google-arrow">
+                  {isOpeningGoogle
+                    ? "..."
+                    : "→"}
+                </span>
+
+              </button>
+
+            </div>
+
+            {/* =================================================
+                SECONDARY ACTIONS
+            ================================================= */}
+
             <div className="review-actions">
+
               <button
                 type="button"
                 className="secondary-button"
@@ -441,9 +638,11 @@ function ReviewPage() {
                   setIsEditing(
                     (current) => !current
                   );
+
                   setError("");
                 }}
               >
+
                 <span>
                   {isEditing ? "✓" : "✎"}
                 </span>
@@ -451,6 +650,7 @@ function ReviewPage() {
                 {isEditing
                   ? "Save Changes"
                   : "Edit Review"}
+
               </button>
 
               <button
@@ -463,6 +663,7 @@ function ReviewPage() {
                 onClick={handleRegenerate}
                 disabled={isRegenerating}
               >
+
                 <span
                   className={
                     isRegenerating
@@ -476,6 +677,7 @@ function ReviewPage() {
                 {isRegenerating
                   ? "Generating..."
                   : "Regenerate"}
+
               </button>
 
               <button
@@ -483,6 +685,7 @@ function ReviewPage() {
                 className="copy-button"
                 onClick={handleCopy}
               >
+
                 <span>
                   {copied ? "✓" : "▣"}
                 </span>
@@ -490,14 +693,23 @@ function ReviewPage() {
                 {copied
                   ? "Copied!"
                   : "Copy Review"}
+
               </button>
+
             </div>
+
           </div>
 
-          {/* Right side */}
+          {/* =================================================
+              EXPERIENCE SUMMARY
+          ================================================= */}
+
           <aside className="experience-summary">
+
             <div className="summary-header">
+
               <div>
+
                 <span className="summary-eyebrow">
                   YOUR INPUT
                 </span>
@@ -505,56 +717,100 @@ function ReviewPage() {
                 <h3>
                   Experience summary
                 </h3>
+
               </div>
 
               <div className="summary-check">
                 ✓
               </div>
+
             </div>
 
-            {/* Facility */}
+            {/* Facilities */}
+
             <div className="summary-item">
+
               <div className="summary-icon">
                 +
               </div>
 
               <div className="summary-detail">
-                <span>FACILITY</span>
 
-                <strong>
-                  {facility}
-                </strong>
+                <span>
+                  FACILITIES
+                </span>
+
+                <div className="tag-list">
+
+                  {facilities.map((facility) => (
+                    <span
+                      key={facility}
+                      className="experience-tag"
+                    >
+                      {facility}
+                    </span>
+                  ))}
+
+                </div>
+
               </div>
+
             </div>
 
-            {/* Doctor */}
+            {/* Doctors */}
+
             <div className="summary-item">
+
               <div className="summary-avatar">
-                {doctor
-                  .replace("Dr. ", "")
-                  .charAt(0)
-                  .toUpperCase() || "D"}
+
+                {doctors.length > 0
+                  ? doctors[0]
+                      .replace("Dr. ", "")
+                      .charAt(0)
+                      .toUpperCase()
+                  : "D"}
+
               </div>
 
               <div className="summary-detail">
-                <span>DOCTOR</span>
 
-                <strong>
-                  {doctor}
-                </strong>
+                <span>
+                  DOCTORS
+                </span>
+
+                <div className="tag-list">
+
+                  {doctors.map((doctor) => (
+                    <span
+                      key={doctor}
+                      className="experience-tag"
+                    >
+                      {doctor}
+                    </span>
+                  ))}
+
+                </div>
+
               </div>
+
             </div>
 
-            {/* Experience */}
+            {/* Clinic experience */}
+
             <div className="summary-item experience-summary-item">
+
               <div className="summary-icon">
                 ♡
               </div>
 
               <div className="summary-detail">
-                <span>YOU LIKED</span>
+
+                <span>
+                  YOU LIKED
+                </span>
 
                 <div className="tag-list">
+
                   {clinicExperience.map(
                     (experience) => (
                       <span
@@ -565,18 +821,58 @@ function ReviewPage() {
                       </span>
                     )
                   )}
+
                 </div>
+
               </div>
+
+            </div>
+
+            {/* Overall experience */}
+
+            <div className="summary-item experience-summary-item">
+
+              <div className="summary-icon overall-summary-icon">
+                ★
+              </div>
+
+              <div className="summary-detail">
+
+                <span>
+                  OVERALL EXPERIENCE
+                </span>
+
+                <div className="tag-list">
+
+                  {overallExperience.map(
+                    (experience) => (
+                      <span
+                        key={experience}
+                        className="experience-tag overall-tag"
+                      >
+                        {experience}
+                      </span>
+                    )
+                  )}
+
+                </div>
+
+              </div>
+
             </div>
 
             <div className="summary-divider"></div>
 
+            {/* AI note */}
+
             <div className="ai-note">
+
               <div className="note-icon">
                 ✦
               </div>
 
               <div>
+
                 <strong>
                   Made from your answers
                 </strong>
@@ -585,62 +881,35 @@ function ReviewPage() {
                   Your review reflects the
                   experience you selected.
                 </p>
+
               </div>
+
             </div>
+
           </aside>
+
         </section>
 
-        {/* Bottom CTA */}
-        <section className="google-section">
-          <div className="google-message">
-            <div className="google-icon">
-              G
-            </div>
+        {/* =================================================
+            FOOTER
+        ================================================= */}
 
-            <div>
-              <strong>
-                Ready to share your experience?
-              </strong>
-
-              <span>
-                Your review will be copied before
-                opening Google.
-              </span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="google-button"
-            onClick={handleGoogleReview}
-            disabled={isOpeningGoogle}
-          >
-            <span>
-              {isOpeningGoogle
-                ? "Opening Google..."
-                : "Copy & Continue to Google"}
-            </span>
-
-            <span className="google-arrow">
-              {isOpeningGoogle
-                ? "..."
-                : "→"}
-            </span>
-          </button>
-        </section>
-
-        {/* Footer */}
         <footer className="review-footer">
+
           <span>
             Madhu Dentocare Clinic
           </span>
 
-          <span>•</span>
+          <span>
+            •
+          </span>
 
           <span>
             Thank you for sharing your experience
           </span>
+
         </footer>
+
       </main>
     </div>
   );

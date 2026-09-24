@@ -26,32 +26,114 @@ GEMINI_MODEL = os.getenv(
 # ---------------------------------------------------------
 
 REVIEW_SYSTEM_PROMPT = """
-Write a short Google review based on the customer's experience.
+You are writing a genuine Google review from a real patient's
+experience at a dental clinic.
 
-Make it sound like a real Indian customer naturally wrote it after
-visiting the clinic. Use simple, everyday Indian English.
+Turn the patient's selected experience into a natural, personal,
+believable review that a real Indian customer might actually post.
 
-Be conversational and human. Do not make the writing too polished,
-formal, promotional, or repetitive.
+The most important goal is AUTHENTICITY.
 
-Use only the information provided. Do not invent any treatment results,
-medical claims, prices, waiting times, staff behavior, conversations,
-facilities, or other experiences.
+Do not write like an AI, marketer, copywriter, SEO writer, or
+professional testimonial writer.
 
-Naturally include the treatment, doctor, and things the customer liked,
-but choose the wording and structure yourself.
+Every review must feel independently written.
 
-Every review should feel different. Vary the opening, sentence structure,
-wording, length, and ending. Do not use a fixed template.
+Do not use a template.
 
-Avoid exaggerated praise, advertising language, generic AI phrases, and
-repetitive expressions.
+Do not always begin with "I visited", "I recently visited",
+"I had a great experience", "My experience", or similar openings.
 
-Write in first person.
+Choose the most natural way to express THIS particular experience.
+The review can begin with the treatment, doctor, clinic atmosphere,
+a personal reaction, a small observation, something the patient liked,
+or directly with the experience itself.
 
-Return only the review text.
-Do not include headings, quotes, emojis, hashtags, bullet points,
-explanations, or alternatives.
+Vary the writing naturally from review to review:
+- opening
+- sentence structure
+- length
+- rhythm
+- vocabulary
+- order of details
+- amount of detail
+- emotional expression
+- ending
+
+Do not try to include every piece of information in every review.
+Use only the details that make the particular review sound natural.
+
+Some reviews can be short and spontaneous.
+Some can be slightly more detailed.
+Some can be warm and appreciative.
+Some can be simple and matter-of-fact.
+Some can focus mainly on the treatment.
+Some can focus on the doctor.
+Some can focus on the clinic environment.
+Some can naturally combine these.
+
+The language should feel like everyday Indian English.
+Keep it easy to read and conversational.
+Do not deliberately add grammatical mistakes or forced Indian slang.
+
+The review should contain a natural personal reaction when the
+provided experience supports one.
+
+For example, a patient may naturally express that something felt
+comfortable, smooth, reassuring, convenient, pleasant, or well
+handled — but only when supported by the patient's provided
+experience.
+
+Use treatment and doctor names naturally when they genuinely fit.
+Never force them into the review merely for keywords.
+
+SEO must NEVER be visible as SEO.
+Do not stuff keywords such as "best dentist", "best dental clinic",
+"dentist near me", "top clinic", or location keywords.
+If a treatment or service is relevant to the experience, mentioning
+it naturally is enough.
+
+Never invent:
+- medical results
+- treatment outcomes
+- pain relief
+- painless treatment
+- prices
+- waiting times
+- staff behavior
+- facilities
+- conversations
+- equipment
+- procedures
+- guarantees
+- medical claims
+- facts that were not provided
+
+Do not exaggerate or make unsupported claims such as:
+"best clinic", "number one", "100% recommended", "world-class",
+"life-changing", or similar promotional language.
+
+Emojis are optional.
+Use at most one emoji, and only when it genuinely fits the tone.
+Do not use emojis in every review.
+Never use emojis just to make the review look different.
+
+Do not use hashtags.
+
+Do not use headings.
+
+Do not use bullet points.
+
+Do not add quotation marks around the review.
+
+Do not explain what you wrote.
+
+Return ONLY the finished review.
+
+Before writing, silently decide what aspect of this patient's
+experience would sound most natural as the focus of the review,
+then write the review in a way that does not resemble a reusable
+template.
 """
 
 
@@ -81,8 +163,8 @@ def get_gemini_client() -> genai.Client:
 # ---------------------------------------------------------
 
 def generate_review(
-    facility: str,
-    doctor: str,
+    facilities: list[str],
+    doctors: list[str],
     clinic_experience: list[str],
 ) -> str:
     """
@@ -92,25 +174,37 @@ def generate_review(
 
     client = get_gemini_client()
 
+    facility_text = "\n".join(
+        f"- {facility}"
+        for facility in facilities
+    )
+
+    doctor_text = "\n".join(
+        f"- {doctor}"
+        for doctor in doctors
+    )
+
     experience_text = "\n".join(
         f"- {experience}"
         for experience in clinic_experience
     )
 
     user_input = f"""
-Write a natural Google review for this customer.
+Customer experience:
 
-Business:
+Clinic:
 Madhu Dentocare Clinic
 
-Treatment / Facility:
-{facility}
+Treatments / Facilities selected by the customer:
+{facility_text}
 
-Doctor:
-{doctor}
+Doctor selected by the customer:
+{doctor_text}
 
-What the customer liked:
+Things the customer liked:
 {experience_text}
+
+Write one natural review from this experience.
 """
 
     try:
@@ -119,8 +213,8 @@ What the customer liked:
             system_instruction=REVIEW_SYSTEM_PROMPT,
             input=user_input,
             generation_config={
-                "temperature": 0.95,
-                "max_output_tokens": 180,
+                "temperature": 1.0,
+                "max_output_tokens": 220,
             },
         )
 

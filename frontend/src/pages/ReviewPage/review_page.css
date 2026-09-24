@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
 }
@@ -24,68 +25,70 @@
     "Segoe UI",
     sans-serif;
 
-  padding: 36px 20px 55px;
+  padding: 40px 20px 60px;
 }
 
-/* Background */
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
 .review-bg-circle {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
+  z-index: 0;
 }
 
 .review-circle-one {
   width: 420px;
   height: 420px;
-
-  top: -230px;
-  right: -140px;
-
-  background: rgba(39, 151, 132, 0.06);
+  top: -220px;
+  right: -150px;
+  background: rgba(47, 168, 148, 0.07);
 }
 
 .review-circle-two {
-  width: 340px;
-  height: 340px;
-
-  bottom: -220px;
-  left: -150px;
-
-  background: rgba(39, 151, 132, 0.045);
+  width: 300px;
+  height: 300px;
+  bottom: -180px;
+  left: -130px;
+  background: rgba(47, 168, 148, 0.05);
 }
 
-/* Container */
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
 
 .review-generator-container {
   width: 100%;
   max-width: 1080px;
-
-  margin: auto;
+  margin: 0 auto;
 
   position: relative;
   z-index: 1;
 }
 
-/* Header */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .review-page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 38px;
+  margin-bottom: 45px;
 }
 
 .review-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
 }
 
 .review-logo {
-  width: 47px;
-  height: 47px;
+  width: 48px;
+  height: 48px;
 
   display: flex;
   align-items: center;
@@ -93,22 +96,22 @@
 
   border-radius: 14px;
 
-  background: #218f7b;
+  background: #1f8f7b;
   color: white;
 
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 800;
 
   box-shadow:
-    0 8px 22px rgba(33, 143, 123, 0.18);
+    0 8px 20px rgba(31, 143, 123, 0.2);
 }
 
 .review-brand h1 {
   margin: 0;
 
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 750;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
 }
 
 .review-brand span {
@@ -116,11 +119,10 @@
 
   margin-top: 2px;
 
-  color: #7d938f;
+  color: #78908c;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-
   letter-spacing: 0.5px;
 }
 
@@ -131,15 +133,15 @@
 
   padding: 9px 14px;
 
-  border: 1px solid #e0ece8;
-  border-radius: 30px;
-
   background: white;
 
-  color: #718681;
+  border: 1px solid #e1ece9;
+  border-radius: 30px;
 
-  font-size: 11px;
-  font-weight: 650;
+  color: #607b76;
+
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .secure-icon {
@@ -158,7 +160,9 @@
   font-size: 9px;
 }
 
-/* Progress */
+/* =========================================================
+   PROGRESS
+========================================================= */
 
 .progress-wrapper {
   display: flex;
@@ -166,7 +170,7 @@
 
   max-width: 600px;
 
-  margin: 0 auto 48px;
+  margin: 0 auto 45px;
 }
 
 .progress-step {
@@ -183,8 +187,10 @@
 }
 
 .progress-circle {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -231,14 +237,16 @@
   background: #8fcfc1;
 }
 
-/* Intro */
+/* =========================================================
+   INTRO
+========================================================= */
 
 .review-intro {
   text-align: center;
 
-  max-width: 650px;
+  max-width: 680px;
 
-  margin: 0 auto 38px;
+  margin: 0 auto 35px;
 }
 
 .review-eyebrow {
@@ -246,9 +254,9 @@
 
   margin-bottom: 12px;
 
-  color: #258e7a;
+  color: #238d7b;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
 
   letter-spacing: 2px;
@@ -257,32 +265,58 @@
 .review-intro h2 {
   margin: 0;
 
-  color: #193e39;
+  color: #173c37;
 
-  font-size: clamp(34px, 5vw, 45px);
+  font-size: clamp(34px, 5vw, 48px);
   line-height: 1.08;
 
-  letter-spacing: -1.6px;
+  letter-spacing: -1.8px;
 
   font-weight: 750;
 }
 
 .review-intro h2 span {
-  color: #248f7b;
+  color: #23927e;
 }
 
 .review-intro p {
-  max-width: 520px;
+  max-width: 560px;
 
-  margin: 15px auto 0;
+  margin: 16px auto 0;
 
-  color: #7c918d;
+  color: #738b87;
 
   font-size: 14px;
   line-height: 1.7;
 }
 
-/* Main content */
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-message {
+  margin: 0 auto 18px;
+
+  max-width: 800px;
+
+  padding: 12px 15px;
+
+  border: 1px solid #f1d3d3;
+  border-radius: 11px;
+
+  background: #fff7f7;
+
+  color: #b34b4b;
+
+  font-size: 11px;
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
 
 .review-content {
   display: grid;
@@ -296,27 +330,31 @@
   align-items: start;
 }
 
-/* Main card */
+/* =========================================================
+   MAIN REVIEW CARD
+========================================================= */
 
 .review-main-card {
   padding: 28px;
 
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
 
-  border: 1px solid #e0ebe8;
+  border: 1px solid #e2ece9;
 
   border-radius: 22px;
 
   box-shadow:
-    0 18px 50px rgba(27, 77, 69, 0.065);
+    0 20px 60px rgba(30, 79, 71, 0.07);
 }
+
+/* Card header */
 
 .card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 23px;
+  margin-bottom: 22px;
 }
 
 .ai-title {
@@ -387,14 +425,16 @@
   background: #37a98f;
 }
 
-/* Rating */
+/* =========================================================
+   RATING
+========================================================= */
 
 .rating-row {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
 
 .stars {
@@ -411,12 +451,14 @@
   font-size: 10px;
 }
 
-/* Review text */
+/* =========================================================
+   REVIEW TEXT
+========================================================= */
 
 .review-text-box {
   min-height: 205px;
 
-  padding: 24px;
+  padding: 23px;
 
   border: 1px solid #e5eeeb;
 
@@ -431,6 +473,7 @@
   color: #405c57;
 
   font-size: 14px;
+
   line-height: 1.85;
 
   letter-spacing: -0.05px;
@@ -439,7 +482,7 @@
 .review-text-box.editing {
   border-color: #54ad9b;
 
-  background: #ffffff;
+  background: white;
 
   box-shadow:
     0 0 0 3px rgba(45, 157, 137, 0.07);
@@ -451,6 +494,7 @@
 
   border: none;
   outline: none;
+
   resize: vertical;
 
   background: transparent;
@@ -463,7 +507,9 @@
   line-height: 1.85;
 }
 
-/* Meta */
+/* =========================================================
+   META
+========================================================= */
 
 .review-meta {
   display: flex;
@@ -481,14 +527,16 @@
   color: #c9d4d1;
 }
 
-/* Actions */
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
 
 .review-actions {
   display: flex;
   align-items: center;
   gap: 9px;
 
-  margin-top: 23px;
+  margin-top: 22px;
 }
 
 .secondary-button,
@@ -500,6 +548,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 7px;
 
   border-radius: 10px;
@@ -566,19 +615,21 @@
   }
 }
 
-/* Summary */
+/* =========================================================
+   EXPERIENCE SUMMARY
+========================================================= */
 
 .experience-summary {
   padding: 24px;
 
   background: white;
 
-  border: 1px solid #e0ebe8;
+  border: 1px solid #e2ece9;
 
   border-radius: 20px;
 
   box-shadow:
-    0 18px 50px rgba(27, 77, 69, 0.05);
+    0 20px 60px rgba(30, 79, 71, 0.06);
 }
 
 .summary-header {
@@ -586,7 +637,7 @@
   justify-content: space-between;
   align-items: flex-start;
 
-  margin-bottom: 23px;
+  margin-bottom: 20px;
 }
 
 .summary-eyebrow {
@@ -686,6 +737,8 @@
 
   font-size: 11px;
   font-weight: 700;
+
+  line-height: 1.3;
 }
 
 .experience-summary-item {
@@ -763,125 +816,123 @@
   color: #91a09c;
 
   font-size: 8px;
+
   line-height: 1.5;
 }
 
-/* Google section */
-
-.google-section {
-  margin-top: 18px;
-
-  padding: 18px 20px;
-
+/* =========================================================
+   GOOGLE REVIEW CTA — INSIDE REVIEW CARD
+========================================================= */
+.google-review-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  gap: 20px;
-
-  border: 1px solid #dcebe7;
-
-  border-radius: 17px;
-
-  background:
-    linear-gradient(
-      100deg,
-      #f7fcfa,
-      #ffffff
-    );
+  gap: 18px;
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid #cfe8df;
+  border-radius: 15px;
+  background: linear-gradient(115deg, #eef9f5, #f9fdfb);
 }
 
+.google-review-info,
 .google-message {
   display: flex;
   align-items: center;
-
   gap: 12px;
+  min-width: 0;
 }
 
 .google-icon {
-  width: 40px;
-  height: 40px;
-
   display: flex;
+  flex: 0 0 40px;
   align-items: center;
   justify-content: center;
-
-  border-radius: 11px;
-
-  background: white;
-
+  width: 40px;
+  height: 40px;
   border: 1px solid #e1ebe8;
-
+  border-radius: 11px;
+  background: #fff;
   color: #4285f4;
-
   font-size: 18px;
   font-weight: 800;
 }
 
+.google-review-info strong,
 .google-message strong {
   display: block;
-
-  color: #385650;
-
-  font-size: 11px;
+  color: #315a50;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.4;
 }
 
+.google-review-info span,
 .google-message span {
   display: block;
-
   margin-top: 4px;
-
-  color: #8c9c98;
-
-  font-size: 9px;
+  color: #718e85;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 .google-button {
-  height: 44px;
-
-  padding: 0 18px;
-
-  display: flex;
+  display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-
-  gap: 13px;
-
-  border: none;
-
-  border-radius: 10px;
-
+  gap: 10px;
+  min-height: 46px;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 11px;
   background: #218f7b;
-
-  color: white;
-
+  color: #fff;
   font-family: inherit;
-
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 750;
-
+  line-height: 1.35;
+  text-align: center;
   cursor: pointer;
-
-  box-shadow:
-    0 8px 20px rgba(33, 143, 123, 0.18);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(33, 143, 123, 0.18);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.google-button:hover {
+.google-button:hover:not(:disabled) {
   transform: translateY(-1px);
-
-  box-shadow:
-    0 11px 25px rgba(33, 143, 123, 0.23);
+  background: #197b69;
+  box-shadow: 0 11px 25px rgba(33, 143, 123, 0.23);
 }
 
-.google-arrow {
-  font-size: 16px;
+.google-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-/* Footer */
+.google-arrow { font-size: 16px; }
+
+/* Fourth-question summary */
+.overall-summary-icon {
+  background: #e9f5ee;
+  color: #278e72;
+}
+
+.overall-tag {
+  background: #eaf7f0 !important;
+  color: #327a60 !important;
+}
+
+/* Keyboard accessibility */
+.google-button:focus-visible,
+.secondary-button:focus-visible,
+.copy-button:focus-visible {
+  outline: 3px solid rgba(35, 143, 123, 0.35);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .review-footer {
   margin-top: 24px;
@@ -897,27 +948,31 @@
   font-size: 9px;
 }
 
-/* Responsive */
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media (max-width: 850px) {
-
   .review-content {
     grid-template-columns: 1fr;
-  }
-
-  .experience-summary {
-    order: 2;
   }
 
   .review-main-card {
     order: 1;
   }
+
+  .experience-summary {
+    order: 2;
+  }
 }
 
-@media (max-width: 650px) {
+/* =========================================================
+   MOBILE
+========================================================= */
 
+@media (max-width: 650px) {
   .review-generator-page {
-    padding: 25px 15px 40px;
+    padding: 20px 12px 35px;
   }
 
   .review-page-header {
@@ -928,78 +983,542 @@
     display: none;
   }
 
+  /* Progress */
+
   .progress-wrapper {
-    margin-bottom: 35px;
+    margin-bottom: 28px;
   }
 
   .progress-step span {
     display: none;
   }
 
+  .progress-circle {
+    width: 27px;
+    height: 27px;
+
+    font-size: 9px;
+  }
+
   .progress-line {
-    margin: 0 8px;
+    margin: 0 7px;
+  }
+
+  /* Intro */
+
+  .review-intro {
+    margin-bottom: 24px;
+  }
+
+  .review-eyebrow {
+    margin-bottom: 9px;
+
+    font-size: 8px;
+    letter-spacing: 1.5px;
   }
 
   .review-intro h2 {
     font-size: 34px;
   }
 
-  .review-main-card {
-    padding: 20px;
+  .review-intro p {
+    margin-top: 11px;
+
+    font-size: 12px;
+    line-height: 1.55;
   }
 
+  /* Main card */
+
+  .review-main-card {
+    padding: 20px 14px;
+
+    border-radius: 18px;
+  }
+
+  .experience-summary {
+    padding: 18px 14px;
+
+    border-radius: 17px;
+  }
+
+  .card-top {
+    margin-bottom: 17px;
+  }
+
+  .ai-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+  }
+
+  .ai-title {
+    gap: 9px;
+  }
+
+  .ai-title h3 {
+    font-size: 12px;
+  }
+
+  .ai-title span {
+    font-size: 8px;
+  }
+
+  .generated-badge {
+    padding: 5px 7px;
+
+    font-size: 7px;
+  }
+
+  /* Rating */
+
+  .rating-row {
+    margin-bottom: 11px;
+  }
+
+  .stars {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .rating-row > span {
+    font-size: 8px;
+  }
+
+  /* Review */
+
+  .review-text-box {
+    min-height: 175px;
+
+    padding: 16px;
+
+    border-radius: 12px;
+  }
+
+  .review-text-box p {
+    font-size: 12px;
+
+    line-height: 1.7;
+  }
+
+  .review-text-box textarea {
+    min-height: 175px;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+  }
+
+  .review-meta {
+    font-size: 8px;
+  }
+
+  /* Action buttons */
+
   .review-actions {
-    flex-wrap: wrap;
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 7px;
+
+    margin-top: 17px;
+  }
+
+  .secondary-button,
+  .copy-button {
+    width: 100%;
+
+    height: 39px;
+
+    padding: 0 7px;
+
+    border-radius: 9px;
+
+    font-size: 9px;
   }
 
   .copy-button {
     margin-left: 0;
   }
 
-  .google-section {
+  /* Summary */
+
+  .summary-header {
+    margin-bottom: 14px;
+  }
+
+  .summary-header h3 {
+    font-size: 13px;
+  }
+
+  .summary-check {
+    width: 24px;
+    height: 24px;
+  }
+
+  .summary-item {
+    padding: 10px 0;
+
+    gap: 8px;
+  }
+
+  .summary-icon,
+  .summary-avatar {
+    width: 31px;
+    height: 31px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+  }
+
+  .summary-detail > span {
+    margin-bottom: 3px;
+
+    font-size: 6.5px;
+  }
+
+  .summary-detail strong {
+    font-size: 10px;
+  }
+
+  .experience-tag {
+    padding: 4px 6px;
+
+    font-size: 7px !important;
+  }
+
+  .summary-divider {
+    margin: 13px 0;
+  }
+
+  .ai-note {
+    padding: 9px;
+
+    gap: 7px;
+  }
+
+  .note-icon {
+    font-size: 12px;
+  }
+
+  .ai-note strong {
+    font-size: 8px;
+  }
+
+  .ai-note p {
+    font-size: 7px;
+  }
+
+  /* Google CTA */
+  .google-review-card {
     flex-direction: column;
     align-items: stretch;
+    gap: 13px;
+    margin-top: 17px;
+    padding: 14px;
+    border-radius: 13px;
   }
+
+  .google-review-info,
+  .google-message { gap: 10px; }
+
+  .google-icon {
+    flex-basis: 35px;
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+  .google-review-info strong,
+  .google-message strong { font-size: 11px; }
+
+  .google-review-info span,
+  .google-message span { font-size: 9px; }
 
   .google-button {
     width: 100%;
+    min-height: 46px;
+    font-size: 11px;
   }
 
-  .google-message {
-    justify-content: center;
+  .review-footer {
+    flex-wrap: wrap;
+
+    margin-top: 18px;
+
+    font-size: 8px;
+
+    text-align: center;
   }
 }
 
-@media (max-width: 430px) {
+/* =========================================================
+   SMALL PHONES
+========================================================= */
 
-  .card-top {
-    align-items: flex-start;
+@media (max-width: 430px) {
+  .review-generator-page {
+    padding: 16px 9px 28px;
+  }
+
+  .review-page-header {
+    margin-bottom: 24px;
+  }
+
+  .review-brand {
+    gap: 9px;
+  }
+
+  .review-logo {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px;
+
+    font-size: 17px;
+  }
+
+  .review-brand h1 {
+    font-size: 16px;
+  }
+
+  .review-brand span {
+    font-size: 9px;
+  }
+
+  /* Progress */
+
+  .progress-wrapper {
+    margin-bottom: 23px;
+  }
+
+  .progress-circle {
+    width: 25px;
+    height: 25px;
+
+    font-size: 8px;
+  }
+
+  .progress-line {
+    margin: 0 5px;
+  }
+
+  /* Intro */
+
+  .review-intro {
+    margin-bottom: 19px;
+  }
+
+  .review-intro h2 {
+    font-size: 29px;
+
+    letter-spacing: -1px;
+  }
+
+  .review-intro p {
+    font-size: 10px;
+  }
+
+  /* Main card */
+
+  .review-main-card {
+    padding: 17px 10px;
+
+    border-radius: 16px;
+  }
+
+  .experience-summary {
+    padding: 16px 10px;
+
+    border-radius: 15px;
+  }
+
+  .ai-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+  }
+
+  .ai-title {
+    gap: 7px;
+  }
+
+  .ai-title h3 {
+    font-size: 10px;
+  }
+
+  .ai-title span {
+    font-size: 7px;
   }
 
   .generated-badge {
     display: none;
   }
 
+  /* Rating */
+
+  .stars {
+    font-size: 12px;
+  }
+
+  .rating-row > span {
+    font-size: 7px;
+  }
+
+  /* Review */
+
   .review-text-box {
-    padding: 18px;
+    min-height: 160px;
+
+    padding: 14px;
+
+    border-radius: 10px;
   }
 
   .review-text-box p {
-    font-size: 13px;
+    font-size: 11px;
+
+    line-height: 1.65;
   }
 
+  .review-text-box textarea {
+    min-height: 160px;
+
+    font-size: 11px;
+
+    line-height: 1.65;
+  }
+
+  .review-meta {
+    font-size: 7px;
+  }
+
+  /* Keep buttons compact in 2 columns */
+
   .review-actions {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
   }
 
   .secondary-button,
   .copy-button {
-    width: 100%;
+    height: 37px;
+
+    padding: 0 5px;
+
+    font-size: 8px;
+
+    gap: 4px;
   }
 
-  .review-footer {
-    flex-wrap: wrap;
-    text-align: center;
+  /* Summary */
+
+  .summary-eyebrow {
+    font-size: 6px;
+  }
+
+  .summary-header h3 {
+    font-size: 12px;
+  }
+
+  .summary-check {
+    width: 22px;
+    height: 22px;
+
+    font-size: 9px;
+  }
+
+  .summary-item {
+    padding: 9px 0;
+  }
+
+  .summary-icon,
+  .summary-avatar {
+    width: 28px;
+    height: 28px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+  }
+
+  .summary-detail > span {
+    font-size: 6px;
+  }
+
+  .summary-detail strong {
+    font-size: 9px;
+  }
+
+  .experience-tag {
+    padding: 3px 5px;
+
+    font-size: 6.5px !important;
+  }
+
+  /* Google CTA */
+  .google-review-card { padding: 12px; }
+
+  .google-icon {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .google-review-info strong,
+  .google-message strong { font-size: 10px; }
+
+  .google-review-info span,
+  .google-message span { font-size: 8px; }
+
+  .google-button { min-height: 44px; font-size: 10px; }
+
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 350px) {
+  .review-generator-page {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .review-main-card {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .experience-summary {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .review-actions {
+    gap: 5px;
+  }
+
+  .secondary-button,
+  .copy-button {
+    font-size: 7.5px;
+  }
+
+  .google-message strong {
+    font-size: 8px;
+  }
+
+  .google-message span {
+    font-size: 6.5px;
   }
 }

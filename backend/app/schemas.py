@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field
 
 
 class ReviewRequest(BaseModel):
-    facility: str = Field(..., min_length=1)
-    doctor: str = Field(..., min_length=1)
+    facilities: list[str] = Field(..., min_length=1)
+    doctors: list[str] = Field(..., min_length=1)
     clinic_experience: list[str] = Field(..., min_length=1)
 
 
